@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Contact V17</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='assets/css/util2.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='assets/css/addp.css')}}">
+<!--===============================================================================================-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+<body>
+
+
+	<div class="container-contact100" >
+		<div class="wrap-contact100">
+			<form class="contact100-form validate-form">
+				<span class="contact100-form-title">
+					Add a New Product
+				</span>
+
+				<label class="label-input100" for="first-name">Enter Product Info *</label>
+				<div class="wrap-input100 rs1-wrap-input100 validate-input" data-validate="Type first name">
+					<input id="pro_name" class="input100" type="text" name="first-name" placeholder="Product Name">
+					<span class="focus-input100"></span>
+				</div>
+				<div class="wrap-input100 rs2-wrap-input100 validate-input" data-validate="Type last name">
+					<input class="input100" id="pro_price" type="text" name="last-name" placeholder="Set Price">
+					<span class="focus-input100"></span>
+				</div>
+
+
+				<label class="label-input100" for="phone">Set Quantity</label>
+				<div class="wrap-input100">
+					<input id="pro_quantity" class="input100" type="text" name="quantity" placeholder="Quantity">
+					<span class="focus-input100"></span>
+				</div>
+
+				<label class="label-input100" for="message">Additional Details *</label>
+				<div class="wrap-input100 validate-input" data-validate = "Message is required">
+					<textarea id="pro_details" class="input100" name="message" placeholder="Enter any specification u wish to provide to the user."></textarea>
+					<span class="focus-input100"></span>
+				</div>
+
+				<div class="container-contact100-form-btn">
+					<button type="button" class="contact100-form-btn" id="add2">
+						ADD
+					</button>
+				</div>
+			</form>
+
+			<div class="contact100-more flex-col-c-m" style="background-color: black;">
+				<div class="flex-w size1 p-b-47">
+					<div class="txt1 p-r-25">
+
+					</div>
+
+					<div class="flex-col size2">
+						<span class="txt1 p-b-20">
+							<h3>Existing Products</h3>
+						</span>
+
+						<span class="txt2" id="pro">
+
+					</div>
+				</div>
+
+				<div class="dis-flex size1 p-b-47">
+					<div class="txt1 p-r-25">
+
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<div id="dropDownSelect1"></div>
+
+<!--===============================================================================================-->
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/bootstrap/js/popper.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/select2/select2.min.js"></script>
+	<script>
+		$(".selection-2").select2({
+			minimumResultsForSearch: 20,
+			dropdownParent: $('#dropDownSelect1')
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="vendor/daterangepicker/moment.min.js"></script>
+	<script src="vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+	<script src="js/main.js"></script>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-23581568-13');
+	</script>
+	<script type="text/javascript">
+	var contract;
+
+	$(document).ready(function(){
+
+		web3 = new Web3(web3.currentProvider);
+
+		var address = "0x392A47Ac7a994d77Fe177129BbC1e2B59f9d983A";
+		var abi = [
+{
+"constant": false,
+"inputs": [
+{
+	"name": "_deal_id",
+	"type": "uint256"
+}
+],
+"name": "acceptOrder",
+"outputs": [],
+"payable": true,
+"stateMutability": "payable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+	"name": "product_price",
+	"type": "uint256"
+},
+{
+	"name": "product_name",
+	"type": "string"
+},
+{
+	"name": "product_quantity",
+	"type": "uint256"
+},
+{
+	"name": "_product_id",
+	"type": "uint256"
+},
+{
+	"name": "additional_details",
+	"type": "string"
+}
+],
+"name": "addProduct",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+	"name": "_product_id",
+	"type": "uint256"
+},
+{
+	"name": "quantity",
+	"type": "uint256"
+}
+],
+"name": "deal",
+"outputs": [],
+"payable": true,
+"stateMutability": "payable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+	"name": "_deal_id",
+	"type": "uint256"
+}
+],
+"name": "delivery",
+"outputs": [],
+"payable": false,
+"stateMutability": "nonpayable",
+"type": "function"
+},
+{
+"constant": false,
+"inputs": [
+{
+	"name": "_deal_id",
+	"type": "uint256"
+}
+],
+"name": "qualityCheck",
+"outputs": [],
+"payable": true,
+"stateMutability": "payable",
+"type": "function"
+},
+{
+"anonymous": false,
+"inputs": [
+{
+	"indexed": false,
+	"name": "farmer",
+	"type": "address"
+},
+{
+	"indexed": false,
+	"name": "product_id",
+	"type": "uint256"
+}
+],
+"name": "Purchased",
+"type": "event"
+},
+{
+"constant": true,
+"inputs": [
+{
+	"name": "",
+	"type": "uint256"
+}
+],
+"name": "_products",
+"outputs": [
+{
+	"name": "",
+	"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+	"name": "",
+	"type": "uint256"
+}
+],
+"name": "_purchases",
+"outputs": [
+{
+	"name": "deal_id",
+	"type": "uint256"
+},
+{
+	"name": "product_id",
+	"type": "uint256"
+},
+{
+	"name": "quantity",
+	"type": "uint256"
+},
+{
+	"name": "amt",
+	"type": "uint256"
+},
+{
+	"name": "buyer",
+	"type": "address"
+},
+{
+	"name": "accepted",
+	"type": "bool"
+},
+{
+	"name": "quality",
+	"type": "bool"
+},
+{
+	"name": "delivered",
+	"type": "bool"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+	"name": "_dl_id",
+	"type": "uint256"
+}
+],
+"name": "getdeal",
+"outputs": [
+{
+	"name": "",
+	"type": "uint256"
+},
+{
+	"name": "",
+	"type": "uint256"
+},
+{
+	"name": "",
+	"type": "uint256"
+},
+{
+	"name": "",
+	"type": "address"
+},
+{
+	"name": "",
+	"type": "bool"
+},
+{
+	"name": "",
+	"type": "bool"
+},
+{
+	"name": "",
+	"type": "bool"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+	"name": "_product_id",
+	"type": "uint256"
+}
+],
+"name": "getProduct",
+"outputs": [
+{
+	"name": "",
+	"type": "uint256"
+},
+{
+	"name": "",
+	"type": "string"
+},
+{
+	"name": "",
+	"type": "uint256"
+},
+{
+	"name": "",
+	"type": "address"
+},
+{
+	"name": "",
+	"type": "string"
+},
+{
+	"name": "",
+	"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "giveDeal",
+"outputs": [
+{
+	"name": "",
+	"type": "uint256[]"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [],
+"name": "giveProduct",
+"outputs": [
+{
+	"name": "",
+	"type": "uint256[]"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+	"name": "",
+	"type": "uint256"
+}
+],
+"name": "products",
+"outputs": [
+{
+	"name": "product_price",
+	"type": "uint256"
+},
+{
+	"name": "product_name",
+	"type": "string"
+},
+{
+	"name": "product_quantity",
+	"type": "uint256"
+},
+{
+	"name": "farmer_address",
+	"type": "address"
+},
+{
+	"name": "additional_details",
+	"type": "string"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+},
+{
+"constant": true,
+"inputs": [
+{
+	"name": "",
+	"type": "uint256"
+}
+],
+"name": "purchases",
+"outputs": [
+{
+	"name": "",
+	"type": "uint256"
+}
+],
+"payable": false,
+"stateMutability": "view",
+"type": "function"
+}
+];
+
+		contract = new web3.eth.Contract(abi,address);
+
+		contract.methods.giveProduct().call().then(async function(_products){
+			console.log(_products);
+			var acc;
+			await ethereum.enable();
+			web3.eth.getAccounts().then(function(accounts){
+				acc = accounts[0];
+				console.log(acc);
+			})
+			var new_div = [];
+			var btn;
+			for (var i=0; i< _products.length; i++)
+			{
+				console.log(_products[i]);
+					contract.methods.getProduct(_products[i]).call().then(function(pro){
+						if (acc == pro[3]){
+							$('#pro').append("Product Name- " + pro[1] + "  ");
+							$('#pro').append("Product Price- "+ pro[0] + "  ");
+							$('#pro').append("Product Quantity- "+ pro[2] + "  ");
+							$('#pro').append("Details- "+ pro[4] + "<br><br />");
+						}
+					})
+			}
+
+		})
+	})
+
+	$('#add2').click(async function(){
+
+		var product_price = parseInt($('#pro_price').val());
+		var product_id = Math.floor(Math.random()*1000);
+		console.log(product_id);
+		var product_name = $('#pro_name').val();
+		var product_quantity = parseInt($('#pro_quantity').val());
+		var additional_details= $('#pro_details').val();
+		await ethereum.enable();
+		web3.eth.getAccounts().then(function(accounts){
+			var acc = accounts[0];
+			console.log(acc);
+			return contract.methods.addProduct(product_price,product_name,product_quantity,product_id,additional_details).send({from: acc});
+		}).then(function(tx){
+			console.log(tx);
+		}).catch(function(tx){
+			console.log(tx);
+		})
+	})
+	</script>
+</body>
+</html>

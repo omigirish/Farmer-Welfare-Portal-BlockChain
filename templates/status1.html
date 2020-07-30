@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Status Tracker</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{{url_for('static',filename='assets/fonts/material-icon/css/material-design-iconic-font.min.css')}}">
+ 
+    <!-- Main css -->
+    <link rel="stylesheet" href="{{url_for('static',filename='assets/css/signup.css')}}">
+</head>
+<body>
+    
+
+<!-- Sing in  Form -->
+<section class="sign-in" style="margin-top:120px ">
+    <div class="container">
+        <div class="signin-content">
+            <div class="signin-image">
+                <figure><img src="{{url_for('static',filename='images/signin-image.jpg')}}" alt="sign up image"></figure>
+                
+            </div>
+
+            <div class="signin-form">
+                <h2 class="form-title">Order Status Tracker</h2>
+                <form method="POST" class="register-form" id="login-form">
+                    <div class="form-group">
+                        <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                        <input type="text" name="your_name" id="username" placeholder="Tracker ID"/>
+                    </div>
+                    <p id="output"></p>
+                    <div class="form-group form-button">
+                        <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCScjpJ82or827flNrDwBYtlL0zdQsNV0A",
+    authDomain: "kjfarmerportal.firebaseapp.com",
+    databaseURL: "https://kjfarmerportal.firebaseio.com",
+    projectId: "kjfarmerportal",
+    storageBucket: "kjfarmerportal.appspot.com",
+    messagingSenderId: "7282432946",
+    appId: "1:7282432946:web:bbdc0172b41737d07a62ab",
+    measurementId: "G-KVQH9JFQ9D"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+<script>
+    const db = firebase.firestore()
+form=document.querySelector('#login-form');
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    user=form.username.value;
+    db.collection('farmers').get().then((snapshot)=> {
+        
+    snapshot.docs.forEach(doc=>{
+       duser=doc.id;
+       dpass=doc.data().password;
+       user=form.username.value;
+       pass=form.your_pass.value;
+       if(duser==user)
+       {
+           if(dpass==pass)
+           {
+               occ=doc.data().occupation;
+           if(occ=="Farmer")
+           {
+               location.replace("/farmer");
+           }
+           else{
+               location.replace("/customer");
+           }
+
+           }
+           else
+           {
+               console.log("Your Life Sucks");
+           }
+       }
+    });
+})
+})
+
+
+</script>
+</body>
+</html>
+ 

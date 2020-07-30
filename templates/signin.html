@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Form by Colorlib</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{{url_for('static',filename='assets/fonts/material-icon/css/material-design-iconic-font.min.css')}}">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="{{url_for('static',filename='assets/css/signup.css')}}">
+</head>
+<body>
+
+
+<!-- Sing in  Form -->
+<section class="sign-in" style="margin-top:120px ">
+    <div class="container">
+        <div class="signin-content">
+            <div class="signin-image">
+                <figure><img src="{{url_for('static',filename='images/signin-image.jpg')}}" alt="sing up image"></figure>
+                <a href="#" class="signup-image-link">Create an account</a>
+            </div>
+
+            <div class="signin-form">
+                <h2 class="form-title">Sign In</h2>
+                <form method="POST" class="register-form" id="login-form">
+                    <div class="form-group">
+                        <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                        <input type="text" name="your_name" id="username" placeholder="Your Name"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
+                        <input type="password" name="your_pass" id="your_pass" placeholder="Password"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
+                        <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                    </div>
+                    <div class="form-group form-button">
+                        <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                    </div>
+                </form>
+                <div class="social-login">
+                    <span class="social-label">Or login with</span>
+                    <ul class="socials">
+                        <li><a href="#"><i class="display-flex-center zmdi zmdi-facebook"></i></a></li>
+                        <li><a href="#"><i class="display-flex-center zmdi zmdi-twitter"></i></a></li>
+                        <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCScjpJ82or827flNrDwBYtlL0zdQsNV0A",
+    authDomain: "kjfarmerportal.firebaseapp.com",
+    databaseURL: "https://kjfarmerportal.firebaseio.com",
+    projectId: "kjfarmerportal",
+    storageBucket: "kjfarmerportal.appspot.com",
+    messagingSenderId: "7282432946",
+    appId: "1:7282432946:web:bbdc0172b41737d07a62ab",
+    measurementId: "G-KVQH9JFQ9D"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+<script>
+    const db = firebase.firestore()
+form=document.querySelector('#login-form');
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    user=form.username.value;
+    db.collection('farmers').get().then((snapshot)=> {
+
+    snapshot.docs.forEach(doc=>{
+       duser=doc.id;
+       dpass=doc.data().password;
+       user=form.username.value;
+       pass=form.your_pass.value;
+       if(duser==user)
+       {
+           if(dpass==pass)
+           {
+               occ=doc.data().occupation;
+           if(occ=="Farmer")
+           {
+               location.replace("/farmer");
+           }
+           else if(occ=="Customer"){
+               location.replace("/customer");
+           }
+
+           else{
+             location.replace("/quality");
+           }
+
+           }
+           else
+           {
+               console.log("Your Life Sucks");
+           }
+       }
+    });
+})
+})
+
+
+</script>
+</body>
+</html>

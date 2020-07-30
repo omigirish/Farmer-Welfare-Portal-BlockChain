@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script type="text/javascript">
+
+window.onload = function () {
+	var chart = new CanvasJS.Chart("chartContainer", {
+		title:{
+			text: "Demand Chain Plot"              
+		},
+		data: [              
+		{
+			// Change type to "doughnut", "line", "splineArea", etc.
+			type: "doughnut",
+			dataPoints: [
+				{ label: "potato",  y: 150  },
+				{ label: "onion", y: 100  },
+				{ label: "wheat", y: 300  },
+				{ label: "rice",  y: 90  },
+				{ label: "peas",  y: 200  },
+				{ label: "carrots",  y: 130  },
+				{ label: "spinach",  y: 60  }
+			]
+		}
+		]
+	});
+	chart.render();
+}
+</script>
+</head>
+<body>
+<div id="chartContainer" style="height: 370px; max-width: 920px; margin: 0px auto;"></div>
+</body>
+</html>

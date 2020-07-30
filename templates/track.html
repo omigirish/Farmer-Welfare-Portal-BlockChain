@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Product Tracking</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  </head>
+  <body>
+    <div class="">
+      <label for="deal_id">Enter the delivery id:-  </label>
+      <input type="text" name="" value="" id="deal_id">
+      <button type="button" name="button" id="check">Track</button>
+    </div>
+    <p id="pro"></p>
+    <p id="pro1"></p>
+    <p id="pro2"></p>
+    <p id="pro3"></p>
+    <p id="pro4"></p>
+    <p id="pro5"></p>
+    <p id="pro6"></p>
+    <script type="text/javascript">
+      var contract;
+
+      $(document).ready(function(){
+
+        web3 = new Web3(web3.currentProvider);
+
+        var address = "0x392A47Ac7a994d77Fe177129BbC1e2B59f9d983A";
+        var abi = [
+{
+  "constant": false,
+  "inputs": [
+    {
+      "name": "_deal_id",
+      "type": "uint256"
+    }
+  ],
+  "name": "acceptOrder",
+  "outputs": [],
+  "payable": true,
+  "stateMutability": "payable",
+  "type": "function"
+},
+{
+  "constant": false,
+  "inputs": [
+    {
+      "name": "product_price",
+      "type": "uint256"
+    },
+    {
+      "name": "product_name",
+      "type": "string"
+    },
+    {
+      "name": "product_quantity",
+      "type": "uint256"
+    },
+    {
+      "name": "_product_id",
+      "type": "uint256"
+    },
+    {
+      "name": "additional_details",
+      "type": "string"
+    }
+  ],
+  "name": "addProduct",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+},
+{
+  "constant": false,
+  "inputs": [
+    {
+      "name": "_product_id",
+      "type": "uint256"
+    },
+    {
+      "name": "quantity",
+      "type": "uint256"
+    }
+  ],
+  "name": "deal",
+  "outputs": [],
+  "payable": true,
+  "stateMutability": "payable",
+  "type": "function"
+},
+{
+  "constant": false,
+  "inputs": [
+    {
+      "name": "_deal_id",
+      "type": "uint256"
+    }
+  ],
+  "name": "delivery",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+},
+{
+  "constant": false,
+  "inputs": [
+    {
+      "name": "_deal_id",
+      "type": "uint256"
+    }
+  ],
+  "name": "qualityCheck",
+  "outputs": [],
+  "payable": true,
+  "stateMutability": "payable",
+  "type": "function"
+},
+{
+  "anonymous": false,
+  "inputs": [
+    {
+      "indexed": false,
+      "name": "farmer",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "name": "product_id",
+      "type": "uint256"
+    }
+  ],
+  "name": "Purchased",
+  "type": "event"
+},
+{
+  "constant": true,
+  "inputs": [
+    {
+      "name": "",
+      "type": "uint256"
+    }
+  ],
+  "name": "_products",
+  "outputs": [
+    {
+      "name": "",
+      "type": "uint256"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [
+    {
+      "name": "",
+      "type": "uint256"
+    }
+  ],
+  "name": "_purchases",
+  "outputs": [
+    {
+      "name": "deal_id",
+      "type": "uint256"
+    },
+    {
+      "name": "product_id",
+      "type": "uint256"
+    },
+    {
+      "name": "quantity",
+      "type": "uint256"
+    },
+    {
+      "name": "amt",
+      "type": "uint256"
+    },
+    {
+      "name": "buyer",
+      "type": "address"
+    },
+    {
+      "name": "accepted",
+      "type": "bool"
+    },
+    {
+      "name": "quality",
+      "type": "bool"
+    },
+    {
+      "name": "delivered",
+      "type": "bool"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [
+    {
+      "name": "_dl_id",
+      "type": "uint256"
+    }
+  ],
+  "name": "getdeal",
+  "outputs": [
+    {
+      "name": "",
+      "type": "uint256"
+    },
+    {
+      "name": "",
+      "type": "uint256"
+    },
+    {
+      "name": "",
+      "type": "uint256"
+    },
+    {
+      "name": "",
+      "type": "address"
+    },
+    {
+      "name": "",
+      "type": "bool"
+    },
+    {
+      "name": "",
+      "type": "bool"
+    },
+    {
+      "name": "",
+      "type": "bool"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [
+    {
+      "name": "_product_id",
+      "type": "uint256"
+    }
+  ],
+  "name": "getProduct",
+  "outputs": [
+    {
+      "name": "",
+      "type": "uint256"
+    },
+    {
+      "name": "",
+      "type": "string"
+    },
+    {
+      "name": "",
+      "type": "uint256"
+    },
+    {
+      "name": "",
+      "type": "address"
+    },
+    {
+      "name": "",
+      "type": "string"
+    },
+    {
+      "name": "",
+      "type": "uint256"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [],
+  "name": "giveDeal",
+  "outputs": [
+    {
+      "name": "",
+      "type": "uint256[]"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [],
+  "name": "giveProduct",
+  "outputs": [
+    {
+      "name": "",
+      "type": "uint256[]"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [
+    {
+      "name": "",
+      "type": "uint256"
+    }
+  ],
+  "name": "products",
+  "outputs": [
+    {
+      "name": "product_price",
+      "type": "uint256"
+    },
+    {
+      "name": "product_name",
+      "type": "string"
+    },
+    {
+      "name": "product_quantity",
+      "type": "uint256"
+    },
+    {
+      "name": "farmer_address",
+      "type": "address"
+    },
+    {
+      "name": "additional_details",
+      "type": "string"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+},
+{
+  "constant": true,
+  "inputs": [
+    {
+      "name": "",
+      "type": "uint256"
+    }
+  ],
+  "name": "purchases",
+  "outputs": [
+    {
+      "name": "",
+      "type": "uint256"
+    }
+  ],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}
+];
+
+        contract = new web3.eth.Contract(abi,address);
+      })
+
+      $('#check').click(async function(){
+        var deal = parseInt($('#deal_id').val());
+        await ethereum.enable();
+    		web3.eth.getAccounts().then(function(accounts){
+    			var acc = accounts[0];
+    			console.log(acc);
+    			contract.methods.getdeal(deal).call().then(function(pro){
+            $('#pro').html("Dealivery ID- " + pro[0] + "<br />");
+            $('#pro1').html("Product ID- " + pro[1] + "<br />");
+            $('#pro2').html("Quantity Ordered- " + pro[2] + "<br />");
+            $('#pro3').html("");
+            $('#pro4').html("");
+            $('#pro5').html("");
+
+            if(pro[4]==true){
+              $('#pro3').html("=> Order has been accepted by the farmer!<br />");
+              if(pro[5]==true){
+                $('#pro4').html("=> Quality check done by the organization! Delivery in progress<br />");
+                if(pro[6]==true){
+                $('#pro5').html("=> Delivery has been recieved by the reciever<br />");
+                }
+                else{
+                btn = document.createElement('button');
+                btn.innerHTML = "Delivery Recieved";
+                btn.onclick = async function(){
+                  await ethereum.enable();
+                  web3.eth.getAccounts().then(function(accounts){
+                    var acc = accounts[0];
+                    console.log(acc);
+                    return contract.methods.delivery(pro[0]).send({from: acc});
+                  }).then(function(tx){
+                    console.log(tx);
+                  }).catch(function(tx){
+                    console.log(tx);
+                  })
+                }
+
+                document.getElementById('pro').appendChild(btn);
+              }
+                $('#pro6').html("<br><br>");
+              }
+            }
+        })
+      })
+    })
+    </script>
+  </body>
+</html>

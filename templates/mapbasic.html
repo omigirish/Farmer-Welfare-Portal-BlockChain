@@ -1,0 +1,72 @@
+<html>
+<head>
+	<title>GOOGLE MAPS</title>
+	<style media="screen">
+		body{
+			background-color: black;
+			color: white;
+			align-items: center;
+		}
+		h1{
+			align-content: center;
+			position: relative;
+			padding-left: 25%;
+		}
+	</style>
+	<script type="text/javascript">
+	function initMap(){
+	x = navigator.geolocation;
+
+	x.getCurrentPosition(success,failure,{maximumAge:10000, timeout:5000, enableHighAccuracy: true});
+}
+var myLat;
+var myLong;
+function checkdis(){
+	var dlat = (myLat - 19.064477) * (Math.PI/180);
+	var dlog = (myLong - 72.835857) * (Math.PI/180);
+	var dis = Math.pow(Math.sin(dlat/2),2) + Math.cos(myLat * (Math.PI/180))*Math.cos(19.139005 * (Math.PI/180))*Math.pow(Math.sin(dlog/2),2);
+	dis = 2*Math.asin(Math.sqrt(dis));
+	var R = 6371;
+	dis = dis * R;
+	document.getElementById("distance").innerHTML = dis;
+	if(dis < 0.1){
+		alert("You are inside the office");
+	}
+	else{
+		alert("You are not inside the office");
+	}
+}
+	function success(position)
+	{
+	myLat = position.coords.latitude;
+	myLong = position.coords.longitude;
+
+	var coords = new google.maps.LatLng(myLat,myLong);
+
+	var mapOptions = {
+	zoom: 16,
+	center:  coords,
+	}
+
+	var map = new google.maps.Map(document.getElementById("map"),mapOptions);
+	var marker =  new google.maps.Marker({map:map, position:coords});
+}
+
+	function failure(){}
+	</script>
+  <style>
+  #map{
+  	height:100%;
+  	width:100%;
+  }
+  </style>
+</head>
+<body>
+<h1 onclick="checkdis()">TO MARK YOUR ATTENDANCE PRESS ME</h1>
+<div id="map"></div>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCv60q-6m4fg1gZyGHx2iLtIOrmGO4zTzw&callback=initMap" type="text/javascript"></script>
+<div id="distance"></div>
+<script type="text/javascript">
+</script>
+</body>
+</html>

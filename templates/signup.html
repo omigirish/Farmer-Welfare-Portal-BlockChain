@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Form by Colorlib</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{{url_for('static',filename='assets/fonts/material-icon/css/material-design-iconic-font.min.css')}}">
+ 
+    <!-- Main css -->
+    <link rel="stylesheet" href="{{url_for('static',filename='assets/css/signup.css')}}">
+</head>
+<body>
+        <!-- Sign up form -->
+        <section class="signup" style="margin-top:120px ">
+            <div class="container">
+                <div class="signup-content">
+                    <div class="signup-form">
+                        <h2 class="form-title">Sign up</h2>
+                        <form method="POST" class="register-form" id="register-form">
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text" name="name" id="name" placeholder="Your Name"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="user"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text" name="username" id="username" placeholder="Make a unique username"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="email"><i class="zmdi zmdi-phone"></i></label>
+                                <input type="text" name="phone" id="phone" placeholder="Your Phone Number"/>
+                            </div>
+                           
+                            <div class="form-group">
+                                <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" name="pass" id="pass" placeholder="Password"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="re-pass"><i class="zmdi zmdi-gps"></i></label>
+                                <input type="password" name="state" id="state" placeholder="Type your location"/>
+                            </div>
+                            <div class="form-group"; style="position:relative;overflow: hidden;margin:10px 0"> 
+                                <table>
+                                <tr><td><input type="radio" id="one" name="occ" value="Farmer" style="position:relative;overflow: hidden;margin:10px 0" > Farmer<br></td>
+                                <td>    <input type="radio" id="two" name="occ" value="Customer" style="position:relative;overflow: hidden;margin:10px 0"> Customer<br></td>
+                                 </table></tr>
+                                </table></div>
+                     
+                           
+                            
+                            <div class="form-group form-button">
+                                <input type="submit" name="signup" id="signup" class="form-submit" value="Register"/>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="signup-image">
+                        <figure><img src="{{url_for('static',filename='images/signup-image.jpg')}}" alt="sing up image"></figure>
+                        <a href="/signin" class="signup-image-link">I am already member</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+            
+    <!-- JS -->
+    <script src="{{url_for('static',filename='assets/vendor/jquery/jquery.min.js')}}"></script>
+    
+</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-firestore.js"></script>
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCScjpJ82or827flNrDwBYtlL0zdQsNV0A",
+    authDomain: "kjfarmerportal.firebaseapp.com",
+    databaseURL: "https://kjfarmerportal.firebaseio.com",
+    projectId: "kjfarmerportal",
+    storageBucket: "kjfarmerportal.appspot.com",
+    messagingSenderId: "7282432946",
+    appId: "1:7282432946:web:bbdc0172b41737d07a62ab",
+    measurementId: "G-KVQH9JFQ9D"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
+<script>
+const db = firebase.firestore()
+//db.settings({timestampsInSnapshots:true});
+
+form=document.querySelector('#register-form');
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    db.collection('farmers').doc(form.username.value).set({
+        name:form.name.value,
+        phone:form.phone.value,
+        state:form.state.value,
+        occupation:form.occ.value,
+        password:form.pass.value
+    });
+    alert("The user has been added successfully");
+    form.name.value="";
+    form.phone.value="";
+    form.state.value="";
+    form.occ.value="";
+    form.pass.value=""; 
+    form.username.value="";
+    form.one.checked=false;
+    form.two.checked=false;
+})
+
+</script>
